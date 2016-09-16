@@ -5,6 +5,6 @@ package ru.innopolis.mputilov;
  */
 public class Main {
     public static void main(String[] args) {
-
+        new MonteCarlo().processSimulation();
     }
 }
