@@ -1,6 +1,7 @@
 package ru.innopolis.mputilov;
 
 import java.util.Arrays;
+import java.util.Comparator;
 import java.util.List;
 
 import static java.util.Collections.swap;
@@ -33,7 +34,7 @@ public class Collections {
             return;
         }
         for (Integer jump : SHELL_SORT_JUMP_CONSTANTS) {
-            for (int firstUnsortedFromLeft = 1; firstUnsortedFromLeft < list.size(); firstUnsortedFromLeft += jump) {
+            for (int firstUnsortedFromLeft = 1; firstUnsortedFromLeft < list.size(); firstUnsortedFromLeft++) {
                 T insertThis = list.get(firstUnsortedFromLeft);
                 //find place where to insert:
                 for (int current = firstUnsortedFromLeft - jump; current >= 0; current -= jump) {
@@ -43,6 +44,37 @@ public class Collections {
                     } else {
                         break;
                     }
+                }
+            }
+        }
+    }
+
+    public static <T> void shellSort(List<T> list, Comparator<T> comparator) {
+        if (list.size() <= 1) {
+            return;
+        }
+        for (Integer jump : SHELL_SORT_JUMP_CONSTANTS) {
+            sortSubListRespectingJumps(list, jump, comparator);
+        }
+    }
+
+    public static <T> void worstCaseShellSorting(List<T> list, Comparator<T> comparator) {
+        shellSort(list, comparator.reversed());
+        sortSubListRespectingJumps(list, 4, comparator.reversed());
+        sortSubListRespectingJumps(list, 13, comparator.reversed());
+        sortSubListRespectingJumps(list, 40, comparator.reversed());
+    }
+
+    private static <T> void sortSubListRespectingJumps(List<T> list, int jump, Comparator<T> comparator) {
+        for (int firstUnsortedFromLeft = 1; firstUnsortedFromLeft < list.size(); firstUnsortedFromLeft++) {
+            T insertThis = list.get(firstUnsortedFromLeft);
+            //find place where to insert:
+            for (int current = firstUnsortedFromLeft - jump; current >= 0; current -= jump) {
+                T maybeGoRight = list.get(current);
+                if (comparator.compare(insertThis, maybeGoRight) < 0) {
+                    swap(list, current + jump, current);
+                } else {
+                    break;
                 }
             }
         }
